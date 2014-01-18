@@ -1,0 +1,12 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf8")
+    title #{locals.title}
+    style
+      include includes/styles.css
+  body
+    form(id="chooseDirForm", method="post", action="results")
+      label(for="targetDir") Directory to scan
+      input(type="text", id="targetDir", name="targetDir", placeholder="c:/users/matt/pictures")
+      input(type="submit", id="submit", name="submit", value="Scan")

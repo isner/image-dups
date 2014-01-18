@@ -1,0 +1,10 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf8")
+    title #{locals.title}
+    style
+      include includes/styles.css
+  body
+    div#results 
+      pre #{locals.results}
