@@ -14,12 +14,16 @@ In the application directory: `npm install` then `node start`
 
 In your browser: `localhost:1923/`
 
-## Know issues
+## Know issues (to-be addressed)
 
 1) Scanning a directory that contains folders with read permission restrictions causes the app the throw an EPERM error.
 
 * Workaround: restart the application and don't scan protected directories.
 
-## Todo
+2) Scanning a large number of files at once (around five to six hundred) causes browsers to re-request the scanning script and initiate a second instance of the scanning loop.
+
+* Workaround: scan small batches of images. This is super lame, I know - I hope to have time to fix it.
+
+## "Wish-list" features
 
 1) Add a GUI to the /results view that allows users to select and delete the unwanted duplicates.
