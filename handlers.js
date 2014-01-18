@@ -47,10 +47,7 @@ function results(request, response) {
       var POST = qs.parse(body);
 
       scanScript(POST.targetDir, function () {
-        var string = fs.readFileSync('./results.txt', 'utf8');
-        locals.results = string;
-        // locals.results = string.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
-
+        locals.results = fs.readFileSync('./results.txt', 'utf8');
         response.end(makeRenderFun(jadePaths.results)(locals));
       });
     });
