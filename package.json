@@ -1,0 +1,9 @@
+{
+  "name": "Image-dups",
+  "description": "Scan directories for duplicate image files",
+  "author": "Matthew Isner <isnerms@gmail.com>",
+  "dependencies": {
+    "fs-walk": "*",
+    "jade": "*"
+  }
+}
