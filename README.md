@@ -20,9 +20,9 @@ In your browser: `localhost:1923/`
 
 * Workaround: restart the application and don't scan protected directories.
 
-2) Scanning a large number of files at once (around five to six hundred) causes browsers to re-request the scanning script and initiate a second instance of the scanning loop.
+2) Scanning a large number of files at once (around two thousand) causes browsers to re-request the scanning script and initiate a second instance of the scanning loop.
 
-* Workaround: scan small batches of images. This is super lame, I know - I hope to have time to fix it.
+* Workaround: scan less than two thousand images. This is super lame, I know - I hope to fix it.
 
 ## "Wish-list" features
 
