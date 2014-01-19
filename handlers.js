@@ -1,14 +1,12 @@
 
 var logRequest = require('./lib/utils').logRequest;
 var scanScript = require('./lib/scan');
-var PORT = require('./config.json').server.port;
 var jade = require('jade');
 var qs = require('querystring');
 var fs = require('fs');
 
-exports.scan = scanView;
+exports.home = homeView;
 exports.results = resultsView;
-exports.resultsAdd = resultsAdd;
 exports.favicon = favicon;
 
 var jadePaths = {
@@ -17,11 +15,9 @@ var jadePaths = {
 };
 
 
-function scanView(request, response) {
+function homeView(request, response) {
   var locals = {};
   locals.title = 'Start Scan - Image dups';
-
-    // Render the /scan view
   response.end(makeRenderFun(jadePaths.scan)(locals));
   logRequest(request.method, request.url);
 }
@@ -29,22 +25,22 @@ function scanView(request, response) {
 function resultsView(request, response) {
   var locals = {};
   locals.title = 'Scan Results - Image dups';
-  locals.results = '';
 
   if (request.method == 'POST') {
+
     collectPost(request, function (POST) {
-      scanScript(POST.targetDir);
-      response.end(makeRenderFun(jadePaths.results)(locals));
+      scanScript(POST.targetDir, function (progress) {
+        console.log('progress: ', progress);
+
+      }, function () {
+        locals.results = fs.readFileSync('./results.txt');
+        response.end(makeRenderFun(jadePaths.results)(locals));
+      });
     });
+    
   }
   
   logRequest(request.method, request.url);
-}
-
-function resultsAdd(request, response) {
-  response.writeHead(200, {'Access-Control-Allow-Origin': 'http://localhost:' + PORT});
-  var results = fs.readFileSync('./results.txt', 'utf8');
-  response.end(results);
 }
 
 function favicon(request, response) {
@@ -79,14 +75,15 @@ function collectPost(request, next) {
   request.on('data', function (data) {
     body += data;
     if (body.length > 1e6) {
-        // FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
-      request.connection.destroy();
+      request.connection.destroy(); // FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
       return;
     }
-  });
 
-  request.on('end', function () {
+  }).on('end', function () {
     var POST = qs.parse(body);
     return next(POST);
+
+  }).on('error', function (error) {
+    console.log(error.message);
   });
 }
