@@ -3,7 +3,6 @@ exports.route = route;
 
 function route(handles, pathname, request, response) {
   if (typeof handles[pathname] === 'function') {
-    console.log('handling a request for ' + pathname);
     handles[pathname](request, response);
 
   } else {
