@@ -1,4 +1,3 @@
-
   // Text input field
 var targetDir = document.getElementById('targetDir');
 
