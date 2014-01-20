@@ -1,6 +1,8 @@
 
 var logRequest = require('./lib/utils').logRequest;
 var scanScript = require('./lib/scan');
+var PORT = require('./config.json').server.port;
+var http = require('http');
 var jade = require('jade');
 var qs = require('querystring');
 var fs = require('fs');
@@ -10,37 +12,60 @@ exports.results = resultsView;
 exports.favicon = favicon;
 
 var jadePaths = {
-  scan: './views/home/body.jade',
+  home: './views/home/body.jade',
   results: './views/results/body.jade'
 };
 
 
 function homeView(request, response) {
-  var locals = {};
-  locals.title = 'Start Scan - Image dups';
-  response.end(makeRenderFun(jadePaths.scan)(locals));
   logRequest(request.method, request.url);
+  var locals = {};
+
+  if (request.method === 'GET') {
+    locals.title = 'Begin - Image dups';
+    response.end(makeRenderFun(jadePaths.home)(locals));
+
+  } else if (request.method === 'POST') {
+    collectPost(request, function (POST) {
+      scanScript(POST.targetDir, function (progress) {
+        // scan progressed
+        locals.title = 'Scanning... - Image dups';
+        response.end(makeRenderFun(jadePaths.home)(locals));
+
+      }, function () {
+        // scan complete
+        http.get('http://localhost:1923/results', function (response) {
+
+        });
+      });
+    });
+
+  }
 }
 
 function resultsView(request, response) {
-  var locals = {};
-  locals.title = 'Scan Results - Image dups';
-
-  if (request.method == 'POST') {
-
-    collectPost(request, function (POST) {
-      scanScript(POST.targetDir, function (progress) {
-        console.log('progress: ', progress);
-
-      }, function () {
-        locals.results = fs.readFileSync('./results.txt');
-        response.end(makeRenderFun(jadePaths.results)(locals));
-      });
-    });
-    
-  }
-  
   logRequest(request.method, request.url);
+  var locals = {};
+  locals.title = 'Results - Image dups';
+  locals.results = fs.readFileSync('./results.txt', 'utf8');
+  console.log('locals.results: ', locals.results);
+  response.end(makeRenderFun(jadePaths.results)(locals));
+
+  // if (request.method === 'POST') {
+    // collectPost(request, function (POST) {
+    //   scanScript(POST.targetDir, function (progress) {
+    //     // scan progressed
+
+    //   }, function () {
+    //     // scan complete
+    //     http.request({host:'127.0.0.1',port:1923,path:'/results',method:'GET'}, function (response) {
+    //       locals.title = 'Results - Image dups';
+    //       locals.results = fs.readFileSync('./results.txt');
+    //       response.end(makeRenderFun(jadePaths.results)(locals));
+    //     });
+    //   });
+    // });
+  // }
 }
 
 function favicon(request, response) {
