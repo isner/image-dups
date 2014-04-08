@@ -1,11 +1,10 @@
-image-dups
-==========
+# Duplicate-image finder for node
 
 Recursively scan a directory to find duplicate image files.
 
 Requires [nodejs](http://nodejs.org/download/)
 
-### CLI
+## CLI directions
 
 ```
 npm install
