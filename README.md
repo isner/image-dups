@@ -3,11 +3,13 @@ image-dups
 
 Recursively scan a directory to find duplicate image files.
 
-## Directions
-
-Requires [node.js](http://nodejs.org/download/)
+Requires [nodejs](http://nodejs.org/download/)
 
 ### CLI
 
-'npm install'
-'node scan <pathtodir>'
+```
+npm install
+node scan <pathtodir>
+```
+
+Results are written to `output.txt` in the project directory. Duplicate filepaths are displayed in pairs.
