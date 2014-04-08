@@ -1,12 +1,12 @@
 
-var fs = require('fs');
-var path = require('path');
-var walk = require('fs-walk');
 var crypto = require('crypto');
+var walk = require('fs-walk');
+var path = require('path');
+var fs = require('fs');
 
 var dupMods = {};
 var imageExtname = /jpg|gif|png|tif$/i;
-var logFile = __dirname + './../results.txt';
+var logFile = __dirname + '/output.txt';
 var records = {};
 var dupCount = 0;
 
@@ -18,9 +18,7 @@ dupMods.prepare = function (fn) {
   dupCount = 0; // Reset the dup count from previous scans
   var now = new Date().toString();
   fs.writeFile(logFile, 'Scan report:\r\n' + now + '\r\n\r\n', function (err) {
-    if (err) {
-      return fn(err);
-    }
+    if (err) throw err;
     fn(null);
   });
 };
@@ -90,6 +88,7 @@ dupMods.writeLog = function (dupNo, filename1, filename2) {
 
 dupMods.done = function (msg) {
   console.log(msg);
+  process.exit();
 };
 
 /**

@@ -1,9 +1,8 @@
 {
-  "name": "Image-dups",
-  "description": "Scan directories for duplicate image files",
+  "name": "image-dups",
+  "description": "Recursively identifies duplicate image files within a directory.",
   "author": "Matthew Isner <isnerms@gmail.com>",
   "dependencies": {
-    "fs-walk": "*",
-    "jade": "*"
+    "fs-walk": "*"
   }
 }
